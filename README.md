@@ -14,7 +14,6 @@
 go_api_admin_blog
 │   .env
 │   main.go
-│   README.md
 │
 ├───api
 │   ├───auth
@@ -29,7 +28,6 @@ go_api_admin_blog
 │   │       server.go
 │   │       user_controller.go
 │   │
-│   ├───fille
 │   ├───middlewares
 │   │       middlewares.go
 │   │
