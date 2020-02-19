@@ -33,13 +33,13 @@ func (server *Server) UploadImage(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-
+	//validate content type
 	filetype := handler.Header["Content-Type"][0]
     if filetype != "image/jpeg" && filetype != "image/jpg" && filetype != "image/png"  {
 		responses.ERROR(w, http.StatusBadRequest, errors.New("incorrect file format"))	
         return
     }
-
+	//get end name file (format)
 	file_format, err := mime.ExtensionsByType(handler.Header["Content-Type"][0])
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -56,18 +56,19 @@ func (server *Server) UploadImage(w http.ResponseWriter, r *http.Request) {
     // write this byte array to our temporary file
 	tempFile.Write(fileBytes)
 
-	
+	//AddWatermark
 	name, err := image.AddWatermark(tempFile.Name())
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-
+	//Resize
 	_, err = image.Resize(name)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+	//Split
 	_, err = image.Split(name)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
