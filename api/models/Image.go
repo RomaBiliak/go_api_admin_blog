@@ -1,7 +1,6 @@
 package models
 
 import (
-
 	"database/sql"
 )
 
@@ -14,6 +13,7 @@ type Image struct {
 }
 var image_id int64 = 0
 var err error = nil
+
 func (i *Image) GetImages(db *sql.DB) (*[]Image, error) {
 	defer db.Close()
 	var images []Image

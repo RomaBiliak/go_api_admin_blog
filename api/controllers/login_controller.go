@@ -1,14 +1,13 @@
 package controllers
 
 import (
-
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+	"golang.org/x/crypto/bcrypt"
 	"github.com/RomaBiliak/go_api_admin_blog/api/models"
 	"github.com/RomaBiliak/go_api_admin_blog/api/responses"
 	"github.com/RomaBiliak/go_api_admin_blog/api/auth"
-	"golang.org/x/crypto/bcrypt"
 )
 
 

@@ -1,12 +1,10 @@
 package models
 
 import (
-
 	"html"
 	"strings"
 	"database/sql"
 	"golang.org/x/crypto/bcrypt"
-
 )
 
 type User struct {

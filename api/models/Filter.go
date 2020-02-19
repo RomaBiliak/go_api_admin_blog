@@ -1,7 +1,6 @@
 package models
 
 import (
-
 	"database/sql"
 )
 
@@ -11,7 +10,6 @@ type Filter struct {
 	Status		int		`json:"status"`
 	Order		int		`json:"order"`
 }
-
 
 var filter_id int64 = 0
 

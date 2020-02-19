@@ -1,15 +1,13 @@
 package controllers
 
 import (
-
 	"net/http"
 	"strconv"
 	"encoding/json"
+	"reflect"
 	"github.com/gorilla/mux"
 	"github.com/RomaBiliak/go_api_admin_blog/api/models"
 	"github.com/RomaBiliak/go_api_admin_blog/api/responses"
-	"reflect"
-	"fmt"
 )
 
 
@@ -70,6 +68,5 @@ func (server *Server) CRUDImage(w http.ResponseWriter, r *http.Request){
 func getImage(r *http.Request)(models.Image, error){
 	image := models.Image{}
 	err := json.NewDecoder(r.Body).Decode(&image)
-	fmt.Println(image)
 	return image, err
 }
