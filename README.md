@@ -53,8 +53,6 @@ go_api_admin_blog
 │   └───image
 │           image.go
 │
-├───server
-│       server.go
 │
 ├───upload_photo
 └───watermark
