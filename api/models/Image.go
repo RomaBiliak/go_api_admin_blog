@@ -36,7 +36,7 @@ func (i *Image) GetImages(db *sql.DB) (*[]Image, error) {
 
 func (i *Image) GetImageById(db *sql.DB, image_id int64) (error) {
 	defer db.Close()
-	row := db.QueryRow("SELECT * FROM images WHERE id=$1", image_id)
+	row := db.QueryRow("SELECT * FROM images WHERE id=$1  ORDER BY created_at DESC", image_id)
 	err := row.Scan(&i.Id, &i.Name, &i.Status, &i.Order)
 	if err != nil {
         return err
@@ -55,7 +55,7 @@ func (i *Image) GetImageById(db *sql.DB, image_id int64) (error) {
 func (i *Image) AddImage(db *sql.DB) (int64, error) {
 	defer db.Close()
 	
-	result, err := db.Exec("INSERT INTO images (name, status, `order`) values ($1,$2,$3)", i.Name, i.Status, i.Order)
+	result, err := db.Exec("INSERT INTO images (name, status, `order`, created_at, updated_at) values ($1, $2, $3, DateTime('now'), DateTime('now'))", i.Name, i.Status, i.Order)
 	if err != nil {
         return image_id, err
     }
@@ -71,7 +71,7 @@ func (i *Image) AddImage(db *sql.DB) (int64, error) {
 
 func (i *Image) EditImage(db *sql.DB) (int64, error) {
 	defer db.Close()
-	_, err := db.Exec("UPDATE images SET name = $1, status = $2, `order` = $3 WHERE id = $4", i.Name, i.Status, i.Order, i.Id)
+	_, err := db.Exec("UPDATE images SET name = $1, status = $2, `order` = $3, updated_at = DateTime('now') WHERE id = $4", i.Name, i.Status, i.Order, i.Id)
 	if err != nil {
         return i.Id, err
 	}
@@ -83,7 +83,7 @@ func (i *Image) EditImage(db *sql.DB) (int64, error) {
 
 func (i *Image) PatchImage(db *sql.DB) (int64, error) {
 	defer db.Close()
-	_, err = db.Exec("UPDATE images SET status = $1 WHERE id = $2", i.Status, i.Id)
+	_, err = db.Exec("UPDATE images SET status = $1, updated_at = DateTime('now') WHERE id = $2", i.Status, i.Id)
 	return i.Id, err
 }
 

@@ -16,7 +16,7 @@ var filter_id int64 = 0
 func (f *Filter) GetFilters(db *sql.DB) (*[]Filter, error) {
 	defer db.Close()
 	var filters []Filter
-    rows, err := db.Query("SELECT * FROM filters")
+    rows, err := db.Query("SELECT * FROM filters ORDER BY created_at DESC")
     if err != nil {
         return &filters, err
     }
@@ -43,7 +43,7 @@ func (f *Filter) GetFilterById(db *sql.DB, filter_id int64) (error) {
 func (f *Filter) AddFilter(db *sql.DB) (int64, error) {
 	defer db.Close()
 	
-	result, err := db.Exec("INSERT INTO filters (name, status, `order`) values ($1,$2,$3)", f.Name, f.Status, f.Order)
+	result, err := db.Exec("INSERT INTO filters (name, status, `order`, created_at, updated_at) values ($1, $2, $3, DateTime('now'), DateTime('now') )", f.Name, f.Status, f.Order)
 	if err != nil {
         return filter_id, err
     }
@@ -53,7 +53,7 @@ func (f *Filter) AddFilter(db *sql.DB) (int64, error) {
 
 func (f *Filter) EditFilter(db *sql.DB) (int64, error) {
 	defer db.Close()
-	_, err := db.Exec("UPDATE filters SET name = $1, status = $2, `order` = $3 WHERE id = $4", f.Name, f.Status, f.Order, f.Id)
+	_, err := db.Exec("UPDATE filters SET name = $1, status = $2, `order` = $3, updated_at = DateTime('now')  WHERE id = $4", f.Name, f.Status, f.Order, f.Id)
 	return f.Id, err
 }
 
@@ -67,7 +67,7 @@ func (f *Filter) DeleteImage(db *sql.DB) (int64, error) {
 func (f *Filter) GetFiltersByImageId(db *sql.DB, image_id int64) (*[]Filter, error) {
 	defer db.Close()
 	var Filters []Filter
-	rows, err := db.Query("SELECT filters.id, filters.name, filters.status, filters.`order` FROM filters LEFT JOIN image_to_filter ON (filters.id = image_to_filter.filter_id) WHERE  image_to_filter.image_id=$1", image_id)
+	rows, err := db.Query("SELECT filters.id, filters.name, filters.status, filters.`order` FROM filters LEFT JOIN image_to_filter ON (filters.id = image_to_filter.filter_id) WHERE  image_to_filter.image_id=$1  ORDER BY filters.created_at DESC", image_id)
 	defer rows.Close()
 	if err != nil {
         return &Filters, err

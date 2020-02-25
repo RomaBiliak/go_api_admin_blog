@@ -44,7 +44,7 @@ func (u *User) Prepare() {
 func (u *User) GetUsers(db *sql.DB) (*[]User, error) {
 	defer db.Close()
 	var users []User
-    rows, err := db.Query("SELECT id, name, login FROM users")
+    rows, err := db.Query("SELECT id, name, login FROM users ORDER BY created_at DESC")
     if err != nil {
         return &users, err
     }
@@ -80,7 +80,7 @@ func (u *User) AddUser(db *sql.DB) (int64, error) {
 	defer db.Close()
 	u.Prepare()
 	u.BeforeSave()
-	result, err := db.Exec("INSERT INTO users (name, login, password) values ($1,$2,$3)", u.Name, u.Login, u.Password)
+	result, err := db.Exec("INSERT INTO users (name, login, password, created_at, updated_at) values ($1, $2, $3, DateTime('now'), DateTime('now') )", u.Name, u.Login, u.Password)
 	if err != nil {
         return user_id, err
     }
@@ -94,9 +94,9 @@ func (u *User) EditUser(db *sql.DB) (int64, error) {
 	u.Prepare()
 	if u.Password !=""{
 		u.BeforeSave()
-		_, err = db.Exec("UPDATE users SET name = $1, login = $2, password = $3 WHERE id = $4", u.Name, u.Login, u.Password, u.Id)
+		_, err = db.Exec("UPDATE users SET name = $1, login = $2, password = $3, updated_at = DateTime('now') WHERE id = $4", u.Name, u.Login, u.Password, u.Id)
 	}else{
-		_, err = db.Exec("UPDATE users SET name = $1, login = $2 WHERE id = $3", u.Name, u.Login, u.Id)
+		_, err = db.Exec("UPDATE users SET name = $1, login = $2 WHERE id = $3, updated_at = DateTime('now')", u.Name, u.Login, u.Id)
 	}
 	
 	return u.Id, err
