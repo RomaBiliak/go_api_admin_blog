@@ -17,7 +17,7 @@ var err error = nil
 func (i *Image) GetImages(db *sql.DB) (*[]Image, error) {
 	defer db.Close()
 	var images []Image
-    rows, err := db.Query("SELECT * FROM images")
+    rows, err := db.Query("SELECT  id, name, status, `order` FROM images")
     if err != nil {
         return &images, err
     }
@@ -36,7 +36,7 @@ func (i *Image) GetImages(db *sql.DB) (*[]Image, error) {
 
 func (i *Image) GetImageById(db *sql.DB, image_id int64) (error) {
 	defer db.Close()
-	row := db.QueryRow("SELECT * FROM images WHERE id=$1  ORDER BY created_at DESC", image_id)
+	row := db.QueryRow("SELECT  id, name, status, `order` FROM images WHERE id=$1  ORDER BY created_at DESC", image_id)
 	err := row.Scan(&i.Id, &i.Name, &i.Status, &i.Order)
 	if err != nil {
         return err

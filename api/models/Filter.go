@@ -16,7 +16,7 @@ var filter_id int64 = 0
 func (f *Filter) GetFilters(db *sql.DB) (*[]Filter, error) {
 	defer db.Close()
 	var filters []Filter
-    rows, err := db.Query("SELECT * FROM filters ORDER BY created_at DESC")
+    rows, err := db.Query("SELECT  id, name, status, `order` FROM filters ORDER BY created_at DESC")
     if err != nil {
         return &filters, err
     }
@@ -35,7 +35,7 @@ func (f *Filter) GetFilters(db *sql.DB) (*[]Filter, error) {
 
 func (f *Filter) GetFilterById(db *sql.DB, filter_id int64) (error) {
 	defer db.Close()
-	row := db.QueryRow("SELECT * FROM filters WHERE id=$1", filter_id)
+	row := db.QueryRow("SELECT  id, name, status, `order` FROM filters WHERE id=$1", filter_id)
 	err := row.Scan(&f.Id, &f.Name, &f.Status, &f.Order)
     return err
 }
