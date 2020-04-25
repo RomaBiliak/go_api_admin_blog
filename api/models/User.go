@@ -71,8 +71,8 @@ func (u *User) GetUserById(db *sql.DB, user_id int64) (error) {
 
 func (u *User) GetUserByLogin(db *sql.DB, login string) (error) {
 	defer db.Close()
-	row := db.QueryRow("SELECT id, name, login FROM users WHERE login=$1", login)
-	err := row.Scan(&u.Id, &u.Name, &u.Login)
+	row := db.QueryRow("SELECT id, name, login,password FROM users WHERE login=$1", login)
+	err := row.Scan(&u.Id, &u.Name, &u.Login, &u.Password)
     return err
 }
 
