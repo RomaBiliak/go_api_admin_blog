@@ -64,6 +64,12 @@ func (f *Filter) DeleteImage(db *sql.DB) (int64, error) {
 	return f.Id, err
 }
 
+func (f *Filter) DeleteFilterById(db *sql.DB, filter_id int64) (error) {
+	defer db.Close()
+	_, err := db.Exec("DELETE FROM filters WHERE id=$1", filter_id)
+    return err
+}
+
 func (f *Filter) GetFiltersByImageId(db *sql.DB, image_id int64) (*[]Filter, error) {
 	defer db.Close()
 	var Filters []Filter

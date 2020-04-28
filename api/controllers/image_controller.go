@@ -41,7 +41,23 @@ func (server *Server) GetImage(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, image)
 
 }
+func (server *Server) DeleteImage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	image_id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
 
+	image := models.Image{}
+
+	err = image.DeleteImageById(server.db(), int64(image_id))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, nil)
+}
 func (server *Server) CRUDImage(w http.ResponseWriter, r *http.Request){
 
 	image, err := getImage(r)

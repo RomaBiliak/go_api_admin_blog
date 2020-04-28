@@ -93,6 +93,13 @@ func (i *Image) DeleteImage(db *sql.DB) (int64, error) {
 	_, err = db.Exec("DELETE FROM image_to_filter WHERE image_id = $1", i.Id)
 	return i.Id, err
 }
+
+func (i *Image) DeleteImageById(db *sql.DB, image_id int64) (error) {
+	defer db.Close()
+	_, err := db.Exec("DELETE FROM images WHERE id=$1", image_id)
+    return err
+}
+
 func addImageToFilter(image_id int64, f *[]Filter, db *sql.DB) error{
 	_, err := db.Exec("DELETE FROM image_to_filter WHERE image_id = $1", image_id)
 	for _, val := range *f {

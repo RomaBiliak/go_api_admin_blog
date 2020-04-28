@@ -42,6 +42,25 @@ func (server *Server) GetFilter(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (server *Server) DeleteFilter(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filter_id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	filter := models.Filter{}
+
+	err = filter.DeleteFilterById(server.db(), int64(filter_id))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, nil)
+
+}
+
 func (server *Server) CRUDFilter(w http.ResponseWriter, r *http.Request){
 
 	filter, err := getFilter(r)

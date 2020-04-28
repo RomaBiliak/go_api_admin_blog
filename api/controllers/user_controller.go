@@ -40,7 +40,24 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, user)
 }
+func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	user_id, err := strconv.ParseInt(vars["id"], 10, 64)
+	
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
 
+	user := models.User{}
+
+	err = user.DeleteUserById(server.db(), int64(user_id))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, nil)
+}
 func (server *Server) CRUDUser(w http.ResponseWriter, r *http.Request){
 
 	user, err := getUser(r)

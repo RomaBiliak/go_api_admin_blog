@@ -96,14 +96,20 @@ func (u *User) EditUser(db *sql.DB) (int64, error) {
 		u.BeforeSave()
 		_, err = db.Exec("UPDATE users SET name = $1, login = $2, password = $3, updated_at = DateTime('now') WHERE id = $4", u.Name, u.Login, u.Password, u.Id)
 	}else{
-		_, err = db.Exec("UPDATE users SET name = $1, login = $2 WHERE id = $3, updated_at = DateTime('now')", u.Name, u.Login, u.Id)
+		_, err = db.Exec("UPDATE users SET name = $1, login = $2, updated_at = DateTime('now') WHERE id = $3", u.Name, u.Login, u.Id)
 	}
 	
 	return u.Id, err
 }
 
-func (u *User) DeleteImage(db *sql.DB) (int64, error) {
+func (u *User) DeleteUser(db *sql.DB) (int64, error) {
 	defer db.Close()
 	_, err := db.Exec("DELETE FROM users WHERE id = $1", u.Id)
 	return u.Id, err
+}
+
+func (u *User) DeleteUserById(db *sql.DB, user_id int64) (error) {
+	defer db.Close()
+	_, err := db.Exec("DELETE FROM users WHERE id=$1", user_id)
+    return err
 }
